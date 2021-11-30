@@ -6,4 +6,4 @@
 
 ### 3) Angular = Ali + Zikas 14h
 
-### 4) Kubernets = Ilyas + Nabil 21h
+### 4) Kubernets = Ilyas + Nabil 21:00h
