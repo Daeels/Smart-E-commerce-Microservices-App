@@ -3,7 +3,7 @@ from flask import *
 
 app = Flask(__name__)
 
-@app.route('/client', methods=["POST"])
+@app.route('/client', methods=["GET"])
 def client():
 	print("request recieved")
 	speech = request.json['speech']
