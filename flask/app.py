@@ -1,4 +1,5 @@
 # Importing librairies
+#Stackoverflow question about the same issue we're facing : https://stackoverflow.com/questions/61466799/docker-failed-to-establish-a-new-connection-errno-111-connection-refused
 
 
 from flask import *
@@ -29,7 +30,7 @@ def get_the_voice():
     #Send recognized text to backend and print the response
     print("speech recognized, sending to the other server...")
     data = {'speech' : txt}
-    URL = "http://127.0.0.1:5001/client"
+    URL = "http://0.0.0.0:5001/client"
     response = requests.get(URL, json=data)
     print(response.text)
 
@@ -40,10 +41,10 @@ def get_the_voice():
 
 	#Send response to the frontend
     return 'recieved'
-
+    #return txt
 
 
 # Run the app
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000', debug=True)
+    app.run(host='127.0.0.0', port=5000, debug=True)
