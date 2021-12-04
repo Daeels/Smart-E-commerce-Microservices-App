@@ -19,59 +19,60 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/get_the_voice', methods=["POST"])
+@app.route('/get_the_voice', methods=["GET"])
 def get_the_voice():
 
     
+    # print(request.json['sound'])
     #Get the voice from frontend 1
     # print(request.json)
 
-    # decoded_data = base64.b64decode(request.json['sound'], '+/')
-    # # print(decoded_data)
-    # wav_file = open("temp.webm", "wb")
-    # wav_file.write(decoded_data)
-    # wav_file.close()
+    decoded_data = base64.b64decode(request.json['sound'], '+/')
+    # print(decoded_data)
+    wav_file = open("temp.webm", "wb")
+    wav_file.write(decoded_data)
+    wav_file.close()
 
     #webm to wav
     # command = ['./FFmpeg/bin/ffmpeg', '-i', 'temp.webm', '-acodec', 'pcm_s16le', '-ac', '1', '-ar', '16000', 'temp' + '.wav']
     # subprocess.run(command,stdout=subprocess.PIPE,stdin=subprocess.PIPE)
 
-    # try:
-    #     ffmpeg.input('temp.webm') \
-    #         .output('temp.wav') \
-    #         .run(capture_stdout=True, capture_stderr=True)
-    # except ffmpeg.Error as e:
-    #     print('stdout:', e.stdout.decode('utf8'))
-    #     print('stderr:', e.stderr.decode('utf8'))
-    #     raise e
+    try:
+        ffmpeg.input('temp.webm') \
+            .output('temp.wav') \
+            .run(capture_stdout=True, capture_stderr=True)
+    except ffmpeg.Error as e:
+        print('stdout:', e.stdout.decode('utf8'))
+        print('stderr:', e.stderr.decode('utf8'))
+        raise e
     
 
 
     
     #Transform speech to text
-    # print("sound recieved, applying speech recognition...")
-    # sr = SpeechRecognizer("fr-FR")
+    print("sound recieved, applying speech recognition...")
+    sr = SpeechRecognizer("fr-FR")
 
-    # try:
-    #     txt = sr.recognize("temp.wav")
-    #     print(txt)
-    # except Exception as e:
-    #     print(e)
-        # print("could not recognize the speech")
+    try:
+        txt = sr.recognize("temp.wav")
+        print(txt)
+    except Exception as e:
+        print(e)
+        print("could not recognize the speech")
         
 
-    #Send recognized text to backend and print the response
+    # Send recognized text to backend and print the response
     print("speech recognized, sending to the other server...")
     # data = {'speech' : txt}
-    txt = "Nike Jordan noir"
+    # txt = "Nike Jordan noir"
     URL = "http://127.0.0.1:8080/products/search/findByDescription?keyword="+txt
     response = requests.get(URL)
-    print(response)
+    json = response.json()
 
 
     #Delete sound file
-    # os.remove('temp.webm')
-    # os.remove('temp.wav')
+    os.remove('temp.webm')
+    os.remove('temp.wav')
 
     #Send response to the frontend
     return 'recieved'
