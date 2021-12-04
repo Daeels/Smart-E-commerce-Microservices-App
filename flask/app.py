@@ -1,18 +1,20 @@
-# Importing librairies
-#Stackoverflow question about the same issue we're facing in docker compose: https://stackoverflow.com/questions/61466799/docker-failed-to-establish-a-new-connection-errno-111-connection-refused
-#type of sound recieve : werkzeug.FileStorage -> application/octet-stream
-#Next piste : recorder.js and type: "audio/wav" and https://www.geeksforgeeks.org/how-to-convert-blob-to-base64-encoding-using-javascript/
+# In this version, An attempt to convert to blob object to base64 before sending it to the server,
+# the server then converts it back to wav format.
+# Issue faced : audio is in reality recieved in webm format, and a method to convert it to pcm wav is still ambigious.
+# When the webm recieved file is converted using a web tool (https://cloudconvert.com/webm-to-wav),
+# the resulting file works fine in the speech recognizer.
+# Tool to check the real format of a file : https://www.checkfiletype.com/ 
+# Succeded to convert webm to wav with ffmpeg
+
+
 
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
-import simpleaudio as sa
-import os
 from SpeechRecognizer import SpeechRecognizer
 import requests
-from werkzeug.utils import secure_filename
-from werkzeug.datastructures import  FileStorage
 import base64
-import wave
+import ffmpeg
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -26,29 +28,23 @@ def get_the_voice():
 
     decoded_data = base64.b64decode(request.json['sound'], '+/')
     # print(decoded_data)
-    wav_file = open("temp.wav", "wb")
+    wav_file = open("temp.webm", "wb")
     wav_file.write(decoded_data)
     wav_file.close()
 
+    #webm to wav
+    # command = ['./FFmpeg/bin/ffmpeg', '-i', 'temp.webm', '-acodec', 'pcm_s16le', '-ac', '1', '-ar', '16000', 'temp' + '.wav']
+    # subprocess.run(command,stdout=subprocess.PIPE,stdin=subprocess.PIPE)
 
-
-
-
-
-    # Get the voice from frontend
-    # recieved_sound = request.files['sound']
-    # print(recieved_sound)
-    # file_name = "recieved_sound.wav"
-    # # recieved_sound.save(file_name)
-    # # print(request.headers['Content-Type'])
+    try:
+        ffmpeg.input('temp.webm') \
+            .output('temp.wav') \
+            .run(capture_stdout=True, capture_stderr=True)
+    except ffmpeg.Error as e:
+        print('stdout:', e.stdout.decode('utf8'))
+        print('stderr:', e.stderr.decode('utf8'))
+        raise e
     
-    
-
-    #Play the sound
-    # wave_obj = sa.WaveObject.from_wave_file(file_name)
-    # play_obj = wave_obj.play()
-    # play_obj.wait_done()
-
 
 
     
@@ -73,8 +69,8 @@ def get_the_voice():
 
 
     #Delete sound file
-    # os.remove(file_name)
-
+    os.remove('temp.webm')
+    os.remove('temp.wav')
 
     #Send response to the frontend
     return 'recieved'
