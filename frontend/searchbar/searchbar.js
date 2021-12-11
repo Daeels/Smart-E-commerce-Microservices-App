@@ -34,7 +34,7 @@ const handleSuccess = function(stream) {
           ajaxRequest.onreadystatechange = function(){
             if(ajaxRequest.readyState == 4){
               if (ajaxRequest.status == 200){
-                console.log('recieved');
+                console.log(ajaxRequest.responseText);
               }
             else if(ajaxRequest.status == 0){
               alert("Aucune réponse du serveur");
@@ -46,7 +46,7 @@ const handleSuccess = function(stream) {
           
             }
           }
-      ajaxRequest.open('POST', "http://localhost:5000/get_the_voice");
+      ajaxRequest.open('POST', "http://localhost:5000/search-by-voice");
       ajaxRequest.setRequestHeader("Content-Type", "application/json");
       data = JSON.stringify(data);
       ajaxRequest.send(data);
@@ -91,3 +91,6 @@ const handleSuccess = function(stream) {
 
 navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(handleSuccess);
+
+
+    //http://localhost:8443/products/search/productsByKeyword?mc=zikas
