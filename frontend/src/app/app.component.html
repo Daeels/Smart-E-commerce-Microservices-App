@@ -1,0 +1,114 @@
+<div>
+<nav id="navbar" class="navbar navbar-inverse" >
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="">ENSAMECOM</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a class="clickable" (click)="onProductsPromo()">Home</a></li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Products
+          <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a class="clickable" (click)="onProductsPromo()">Promotion</a></li>
+          <li><a class="clickable" (click)="onProductsDispo()">Disponibles</a></li>
+        </ul>
+      </li>
+      <li><a routerLink="/caddy">Caddy</a></li>
+      <li style="width: 500px; margin-left: 110px; margin-top: 5px"><div class="form"> <i class="fa fa-search"></i> <input type="text" class="form-control form-input" placeholder="Search anything...">
+        <span class="left-pan">
+					<i type = "button" class="fa fa-microphone clickable" id="startButton"></i>
+					<i type = "button" class="fas fa-stop clickable" id="stopButton"></i>
+					<i type = "button" id="searchButton" class="fas fa-search-dollar clickable"></i>
+				</span>
+      </div></li>
+    </ul>
+    <ul *ngIf="!this.authService.isAuthenticated()" class=" nav navbar-nav pull-right">
+      <li>
+        <a (click)="onLogin()"class="btn">
+          <span class="glyphicon glyphicon-log-in"></span>
+        </a>
+      </li>
+    </ul>
+    <ul *ngIf="this.authService.isAuthenticated()" class=" nav navbar-nav pull-right">
+      <li>
+        <a (click)="onLogout()"class="btn">
+          <span class="glyphicon glyphicon-log-out"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class=" nav navbar-nav pull-right">
+      <li>
+        <a routerLink="/caddy">
+          <span class="badge">{{caddyService.currentCaddyName}} :
+            {{caddyService.getSize()}}</span>
+          <img class="img-circle img-thumbnail img-rounded" src="assets/images/caddy.png">
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div id="viewport">
+  <div id="sidebar" style="position: fixed;top: 65px">
+    <header>
+      <a >Categories</a>
+    </header>
+    <ul class="nav" *ngIf="categories">
+      <li class="clickable" [ngClass]="currentCategorie==c?'active':''"  (click)="getProductsByCat(c)" *ngFor="let c of categories._embedded.categories">
+        <a>
+          <i class="zmdi zmdi-view-dashboard"></i> {{c.name}}
+        </a>
+
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-12">
+    <router-outlet>
+
+    </router-outlet>
+  </div>
+</div>
+
+</div>
+
+<style>
+
+
+  .form {
+    position: relative
+  }
+
+  .form .fa-search {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #9ca3af
+  }
+
+  .form span {
+    position: absolute;
+    right: 17px;
+    top: 13px;
+    padding: 2px;
+    border-left: 1px solid #d1d5db
+  }
+
+  .left-pan {
+    padding-left: 7px
+  }
+
+  .left-pan i {
+    padding-left: 10px
+  }
+
+  .form-input {
+    height: 55px;
+    text-indent: 33px;
+    border-radius: 10px
+  }
+
+  .form-input:focus {
+    box-shadow: none;
+    border: none
+  }
+</style>
