@@ -107,10 +107,10 @@ def search_by_voice():
     for product_selected in products_selected :
         products_selected_json.append({'name':product_selected.name, 'id':product_selected.id, 'available':product_selected.available, 'current_price':product_selected.current_price, 'description':product_selected.description, 'photo_name':product_selected.photo_name, 'promotion':product_selected.promotion, 'selected':product_selected.selected, 'category_id':product_selected.category_id})
 
+    products_selected_json = {"_embedded" : {"products" : products_selected_json}}
     products_selected_json = jsonify(products_selected_json)
 
-    
-
+ 
     #Delete sound file
     os.remove('temp.webm')
     os.remove('temp.wav')
@@ -165,6 +165,7 @@ def search_by_text():
         for product_selected in products_selected :
             products_selected_json.append({'name':product_selected.name, 'id':product_selected.id, 'available':product_selected.available, 'current_price':product_selected.current_price, 'description':product_selected.description, 'photo_name':product_selected.photo_name, 'promotion':product_selected.promotion, 'selected':product_selected.selected, 'category_id':product_selected.category_id})
 
+        products_selected_json = {"_embedded" : {"products" : products_selected_json}}
         products_selected_json = jsonify(products_selected_json)
 
         # Send the products back to the client

@@ -4,6 +4,7 @@
 
 const stopButton = document.getElementById('stopButton');
 const startButton = document.getElementById('startButton');
+const searchButton = document.getElementById('searchButton');
 
 const handleSuccess = function(stream) {
   const options = {mimeType: 'audio/webm'}; //'auido/wav' is not supported
@@ -35,6 +36,8 @@ const handleSuccess = function(stream) {
             if(ajaxRequest.readyState == 4){
               if (ajaxRequest.status == 200){
                 console.log(ajaxRequest.responseText);
+                localStorage.setItem("searched_item",JSON.stringify(ajaxRequest.responseText))
+                window.location.replace("http://localhost:4200/products/6/0")
               }
             else if(ajaxRequest.status == 0){
               alert("Aucune réponse du serveur");
@@ -93,4 +96,35 @@ navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(handleSuccess);
 
 
-    //http://localhost:8443/products/search/productsByKeyword?mc=zikas
+
+
+searchButton.addEventListener('click', function() {
+      let input = document.getElementById('searchInput').value;
+
+      let ajaxRequest = new XMLHttpRequest();
+          ajaxRequest.onreadystatechange = function(){
+            if(ajaxRequest.readyState == 4){
+              if (ajaxRequest.status == 200){
+                console.log(ajaxRequest.responseText);
+                localStorage.setItem("searched_item",JSON.stringify(ajaxRequest.responseText))
+                window.location.replace("http://localhost:4200/products/6/0")
+              }
+            else if(ajaxRequest.status == 0){
+              alert("Aucune réponse du serveur");
+            }
+            else{
+              alert(ajaxRequest.responseText);
+
+            }
+          
+            }
+          }
+      ajaxRequest.open('GET', "http://localhost:5000/search-by-text?text="+input);
+      // ajaxRequest.setRequestHeader("Content-Type", "application/json");
+      // data = JSON.stringify(data);
+      ajaxRequest.send();
+      // console.log(data);
+      
+      });
+
+    
