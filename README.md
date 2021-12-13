@@ -1,9 +1,4 @@
-# Microservices-Project
+# Application E-commerce intelligente
 
-### 1) Flask = Ilyas + Ali 14h
-
-### 2) JEE = Zikas + Nabil 14h
-
-### 3) Angular = Ali + Zikas 14h
-
-### 4) Kubernets = Ilyas + Nabil 21:00h
+### Création de trois microservices frontend backend et un service pour la recherche intelligente chacun dans un contenaire en utilisant docker compose.
+### Outils : Flask, Spring boot, Angular, Mysql, Docker
