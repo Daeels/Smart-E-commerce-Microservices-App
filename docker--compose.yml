@@ -1,0 +1,43 @@
+version: '3'
+services:
+
+  mysql:
+    container_name: database
+    image: mysql:5.7
+    command: --innodb_use_native_aio=0
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=ecommerce_microservices
+    ports:
+      - "3388:3306"
+
+  spring:
+    image: spring
+    container_name: backend_spring
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ecommerce_microservices?autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "root"
+    depends_on:
+      - mysql
+      
+  flask:
+    image: flask
+    container_name: backend_flask
+    ports:
+     - "5000:5000"
+    depends_on : 
+      - mysql
+
+  frontend: 
+    image: angular
+    container_name: frontend_angular
+    ports:
+     - "81:80"
+    depends_on:
+      - spring
+      - flask
+     
