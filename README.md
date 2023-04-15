@@ -1,4 +1,4 @@
-# Microservices Project 🚀
+# Smart-E-commerce-Microservices-App 🚀
 
 Welcome to the Microservices Project! This project is an example of a microservices architecture.
 
